@@ -53,7 +53,7 @@ if (!COMMAND_NAME) {
     COMMAND_NAME = "chat"
 }
 if (!CHANNELS) {
-    CHANNELS = ["oSetinhas", "jones88"]
+    CHANNELS = ["D1rtyD3vil"]
 } else {
     // split channels by comma into array
     CHANNELS = CHANNELS.split(",")

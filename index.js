@@ -112,25 +112,21 @@ bot.onMessage(async (channel, user, message, self) => {
         // make openai call
         const response = await openai_ops.make_openai_call(text);
 
-        // split response if it exceeds twitch chat message length limit
-        // send multiples messages with a delay in between
-        if (response.length > MAX_LENGTH) {
-            const messages = response.match(new RegExp(`.{1,${MAX_LENGTH}}`, "g"));
-            messages.forEach((message, index) => {
-                setTimeout(() => {
-                    bot.say(channel, message);
-                }, 1000 * index);
-            });
-        } else {
-            bot.say(channel, response);
-            try {
-                console.log(user.username + ' - ' + user.userstate);
-                const ttsAudioUrl = await bot.sayTTS(channel, response, user.userstate);
-                // Notify clients about the file change
-                notifyFileChange(ttsAudioUrl);
-            } catch (error) {
-                console.error(error);
-            }
+       // send the response without splitting
+if (response.length > MAX_LENGTH) {
+    console.warn("Response length exceeds MAX_LENGTH but will be sent as is.");
+}
+
+bot.say(channel, response);
+
+try {
+    console.log(user.username + ' - ' + user.userstate);
+    const ttsAudioUrl = await bot.sayTTS(channel, response, user.userstate);
+    // Notify clients about the file change
+    notifyFileChange(ttsAudioUrl);
+} catch (error) {
+    console.error(error);
+}
         }
     }
 });
